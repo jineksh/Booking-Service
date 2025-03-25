@@ -5,5 +5,5 @@ dotenv.config();
 const PORT = process.env.PORT;
 
 module.exports = {
-    PORT
+    PORT,FLIGHT_URL : process.env.FLIGHT_URL
 }
