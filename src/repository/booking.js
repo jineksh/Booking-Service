@@ -32,6 +32,7 @@ class Bookingrepo {
             }
             if (data.noOfSeat) {
                 booking.noOfSeat = data.noOfSeat;
+                booking.price = data.price;
             }
             await booking.save();
             return booking;

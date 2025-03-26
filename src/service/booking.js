@@ -53,6 +53,30 @@ class BookingService {
 
                 return finalBooking;
             }
+            if(data.noOfSeat){
+                const booking = await this.repository.get(bookingId);
+
+                const url = `${FLIGHT_URL}/api/v1/flights/${booking.flightId}`;
+                const flight = await axios.get(url);
+                const flightdata = flight.data.data;
+                let totalseat = flightdata.seats + booking.noOfSeat;
+                await axios.patch(url, {
+                    seats: totalseat
+                });
+                const price = flightdata.price * data.noOfSeat;
+                const bookingpayload = {...data,price};
+                const finalBooking = await this.repository.update(booking.id, bookingpayload);
+
+                const flight2 = await axios.get(url);
+                const flight2data = flight2.data.data;
+
+                totalseat = flight2data.seats - finalBooking.noOfSeat;
+                await axios.patch(url, {
+                    seats: totalseat
+                });
+                
+                return finalBooking;
+            }
         } catch (error) {
             console.log(error);
             throw new ServiceError();
